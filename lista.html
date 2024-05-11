@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pessoas</title>
+    <link rel="stylesheet" href="lista.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="root.css">
+</head>
+
+<body>
+
+    <div id="lista-pessoas"></div>
+
+    <script>
+        function converterData(data) {
+            // Cria um objeto de data a partir da string fornecida
+            var dataObj = new Date(data);
+
+            // Extrai os componentes da data
+            var dia = dataObj.getDate();
+            var mes = dataObj.getMonth() + 1; // Mês é base 0, então adicionamos 1
+            var ano = dataObj.getFullYear();
+            var horas = dataObj.getHours();
+            var minutos = dataObj.getMinutes();
+
+            // Formata os componentes da data para o formato desejado
+            var dataFormatada = `${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano} ${horas}:${minutos}`;
+
+            return dataFormatada;
+        }
+        // Array de objetos com dados das pessoas
+        function get_acolhidos() {
+            return new Promise((resolve, reject) => {
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                        'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                    }
+                };
+
+                let params = { "where": `{"deleted": false}` }
+                url = new URL('https://parseapi.back4app.com/classes/acolhidos')
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, options)
+                    .then(response => response.json())
+                    .then(response => { resolve(response.results) })
+                    .catch(err => console.error(err));
+            })
+        }
+
+        function delete_acolhido(id) {
+            console.log(id);
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+                body: JSON.stringify({ deleted: true })
+            };
+
+            fetch('https://parseapi.back4app.com/classes/acolhidos/' + id, options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    location.reload()
+                })
+                .catch(err => console.error(err));
+        }
+        // Função para criar e exibir a lista de pessoas
+        async function exibirListaPessoas() {
+            var pessoas = await get_acolhidos()
+            console.log(pessoas);
+            var listaPessoasDiv = document.getElementById("lista-pessoas");
+
+            // Limpa qualquer conteúdo existente na div
+            listaPessoasDiv.innerHTML = "";
+
+            // Itera sobre o array de pessoas e cria elementos HTML para exibir seus dados
+            pessoas.forEach(function (pessoa) {
+                var pessoaDiv = document.createElement("div");
+                pessoaDiv.classList.add("pessoa");
+                pessoaDiv.id = pessoa.objectId
+
+                pessoaDiv.innerHTML = `
+                <div>
+                <h3>${pessoa.nome_completo}</h3>
+                <p><strong>Data de Nascimento:<br></strong> ${converterData(pessoa.data_nascimento.iso)}</p>
+                
+                </div>
+                <div>
+                    <p><strong>CPF:<br></strong> ${pessoa.cpf}</p>
+                <p><strong>Telefone:<br></strong> ${pessoa.telefone}</p>
+                <p><strong>Endereço:<br></strong> ${pessoa.endereco}, ${pessoa.numero} - ${pessoa.complemento}, ${pessoa.bairro}, ${pessoa.cidade}</p>
+                </div>
+                <div>
+                <p><strong>Situação da Família:<br></strong> ${pessoa.situacao_familia}</p>
+                <p><strong>Saúde e Necessidades Especiais:<br></strong> ${pessoa.saude_especiais}</p>
+                <p><strong>Observação Geral:<br></strong> ${pessoa.observacao_geral}</p>
+                </div>
+                <button onclick="delete_acolhido('${pessoa.objectId}')"><span class="material-symbols-sharp">delete</span></button>
+            `;
+
+                listaPessoasDiv.appendChild(pessoaDiv);
+            });
+        }
+
+        // Chama a função para exibir a lista de pessoas ao carregar a página
+        window.onload = exibirListaPessoas;
+    </script>
+
+</body>
+
+</html>

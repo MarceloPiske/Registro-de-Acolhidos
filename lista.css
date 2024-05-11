@@ -1,0 +1,33 @@
+.pessoa {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    border: 1px solid #363949;
+    border-radius: 10px;
+    padding: 5px;
+    max-width: calc(100% - 10px);
+    margin-bottom: 10px;
+}
+.pessoa h3 {
+    width: 100%;
+    min-width: 15%;
+}
+.pessoa p {
+    padding: 1%;
+    /* width: 10%; */
+    max-width: 100%;
+}
+
+.pessoa div {
+    width: 40%;
+    
+}
+.pessoa div:first-child {
+    width: 20%;
+}
+#lista-pessoas {
+    max-width: 100%;
+    padding: 20px;
+}

@@ -1,0 +1,98 @@
+
+
+nav {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 10vh;
+    background-color: #363949;
+    padding-right: 1rem;
+}
+.container {
+    height: 90vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.form {
+    height: calc(35% - 2rem);
+    overflow: hidden;
+    padding: 1rem;
+}
+.form form {
+    height: 90%;
+}
+.form-content {
+    padding: .5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10%;
+    height: 70%;
+    align-items: stretch;
+}
+.form-content div:last-child {
+    width: 40%;
+}
+.form-content label {
+    padding: 5px;
+    margin: auto;
+}
+.form-content input {
+    padding: 5px;
+    margin: auto;
+}
+ input[type=submit]{
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none ;
+    margin-left: 1rem;
+}
+.list {
+    height: calc(65% - 2rem);
+    overflow: hidden;
+    padding: 1rem;
+}
+#lista-pessoas-sairam {
+    padding: .5rem;
+    display: flex;
+    gap: 1%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-height: 100%;
+    height: 90%;
+    max-width: 100%;
+    overflow: auto;
+}
+
+.pessoa {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    border: 1px solid #363949;
+    border-radius: 10px;
+    padding: 5px;
+
+}
+.pessoa h3 {
+    width: 15%;
+    min-width: 15%;
+}
+.pessoa p {
+    padding: 1%;
+    /* width: 10%; */
+    max-width: 25%;
+}
+
+textarea {
+    width: 100%;
+    min-height: 90%;
+    border: 1px solid #363949;
+    padding: 5px;
+}

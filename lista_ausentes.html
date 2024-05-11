@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pessoas que Saíram</title>
+    <link rel="stylesheet" href="./root.css">
+    <link rel="stylesheet" href="./lista_ausentes.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">Registrar novo Acolhido</a>
+        <a href="lista_ausentes.html">Controle de Saídas</a>
+    </nav>
+    <div class="container">
+        <div class="form">
+            <h2>Adicionar Pessoa que Saiu</h2>
+            <form id="form-adicionar-pessoa">
+                <div class="form-content">
+                    <div>
+                        <label for="nome">Nome Completo:</label><br>
+                        <input type="text" id="nome" name="nome" required><br>
+                        <br>
+                        <label for="volta">Vai voltar?</label><br>
+                        <input type="checkbox" name="volta" id="volta"><span>Sim</span><br>
+                    </div>
+                    <div>
+                        <label for="data_saida">Data de Saída:</label><br>
+                        <input type="datetime-local" id="data_saida" name="data_saida" required><br>
+                        <br>
+                        <label for="expectativa_chegada">Expectativa de Chegada:</label><br>
+                        <input type="datetime-local" id="expectativa_chegada" name="expectativa_chegada" required><br>
+                    </div>
+                    <div>
+                        <label for="motivo_da_saida">Motivo da Saída:</label><br>
+                        <textarea id="motivo_da_saida" name="motivo_da_saida"></textarea><br>
+                    </div>
+                </div>
+                <input type="submit" value="Adicionar">
+            </form>
+        </div>
+        <div class="list">
+            <h2>Histórico de Saídas</h2>
+            <div id="lista-pessoas-sairam"></div>
+        </div>
+    </div>
+    <script>
+        // Array de objetos com dados das pessoas que saíram
+        function get_pessoas_sairam() {
+            return new Promise((resolve, reject) => {
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                        'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                    }
+                };
+                let params = {"where": `{"deleted": false}`}
+                url = new URL('https://parseapi.back4app.com/classes/lista_saida')
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, options)
+                    .then(response => response.json())
+                    .then(response => { resolve(response.results) })
+                    .catch(err => console.error(err));
+            })
+        }
+
+        function create_pessoas_sairam(params) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+
+                body: JSON.stringify(params)
+            };
+
+            fetch('https://parseapi.back4app.com/classes/lista_saida', options)
+                .then(response => response.json())
+                .then(response => console.log(response))
+                .catch(err => console.error(err));
+        }
+
+        function delete_pessoas_sairam(id) {
+            //console.log(id);
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+                body: JSON.stringify({ deleted: true })
+            };
+
+            fetch('https://parseapi.back4app.com/classes/lista_saida/' + id, options)
+                .then(response => response.json())
+                .then(response => {console.log(response)
+                location.reload()})
+                .catch(err => console.error(err));
+
+                
+        }
+
+
+        function chegou(id) {
+            let chegou = document.getElementById("chegou-" + id).checked
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+                body: JSON.stringify({ chegou: chegou })
+            };
+            fetch('https://parseapi.back4app.com/classes/lista_saida/' + id, options)
+                .then(response => response.json())
+                .then(response => console.log(response))
+                .catch(err => console.error(err));
+        }
+        
+        function converterData(data) {
+            // Cria um objeto de data a partir da string fornecida
+            var dataObj = new Date(data);
+
+            // Extrai os componentes da data
+            var dia = dataObj.getDate();
+            var mes = dataObj.getMonth() + 1; // Mês é base 0, então adicionamos 1
+            var ano = dataObj.getFullYear();
+            var horas = dataObj.getHours();
+            var minutos = dataObj.getMinutes();
+
+            // Formata os componentes da data para o formato desejado
+            var dataFormatada = `${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano} ${horas}:${minutos}`;
+
+            return dataFormatada;
+        }
+        // Função para criar e exibir a lista de pessoas que saíram
+        async function exibirListaPessoasQueSairam() {
+            pessoasQueSairam = await get_pessoas_sairam()
+            console.log(pessoasQueSairam);
+            var listaPessoasSairamDiv = document.getElementById("lista-pessoas-sairam");
+
+            // Limpa qualquer conteúdo existente na div
+            listaPessoasSairamDiv.innerHTML = "";
+
+            // Itera sobre o array de pessoas que saíram e cria elementos HTML para exibir seus dados
+            pessoasQueSairam.forEach(function (pessoa) {
+                var pessoaDiv = document.createElement("div");
+                pessoaDiv.classList.add("pessoa");
+                let checked = pessoa.chegou ? "checked": ""
+                pessoaDiv.innerHTML = `
+                <h3>${pessoa.nome_completo}</h3>
+                <p><strong>Data de Saída:<br></strong> ${converterData(pessoa.data_saida.iso)}</p>
+                <p><strong>Chegada:<br></strong> ${converterData(pessoa.expectativa_chegada.iso)}</p>
+                <p><strong>Voltará?<br></strong> ${pessoa.volta == true ? "Sim" : "Não"}</p>
+                <p><strong>Motivo da Saída:<br></strong> ${pessoa.motivo_da_saida}</p>
+                <p><b>Chegou:</b><br><input onclick="chegou('${pessoa.objectId}')" type="checkbox" name="chegou" id="chegou-${pessoa.objectId}" ${checked}></p>
+                
+                <button onclick="delete_pessoas_sairam('${pessoa.objectId}')"><span class="material-symbols-sharp">delete</span></button>
+            `;
+
+            listaPessoasSairamDiv.appendChild(pessoaDiv);
+            });
+        }
+
+        // Função para adicionar uma pessoa que saiu à lista
+        function adicionarPessoaQueSaiu(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+
+            // Captura dos dados do formulário
+            var nome = document.getElementById("nome").value;
+            var dataSaida = document.getElementById("data_saida").value;
+            var expectativaChegada = document.getElementById("expectativa_chegada").value;
+            var volta = document.getElementById("volta").value == "on" ? true : false;
+            var motivo_da_saida = document.getElementById("motivo_da_saida").value;
+
+            // Cria um objeto com os dados da pessoa
+            var novaPessoa = {
+                nome_completo: nome,
+                data_saida: { "__type": "Date", "iso": dataSaida },
+                expectativa_chegada: { "__type": "Date", "iso": expectativaChegada },
+                volta,
+                motivo_da_saida,
+                chegou: false,
+                deleted: false
+            };
+
+            // Adiciona a pessoa à lista
+            //pessoasQueSairam.push(novaPessoa);
+            create_pessoas_sairam(novaPessoa)
+            //console.log(novaPessoa)
+
+            // Limpa o formulário
+            document.getElementById("form-adicionar-pessoa").reset();
+
+            // Atualiza a lista de pessoas que saíram
+            location.reload()
+        }
+
+        // Adiciona um ouvinte de evento para o envio do formulário
+        document.getElementById("form-adicionar-pessoa").addEventListener("submit", adicionarPessoaQueSaiu);
+
+        // Chama a função para exibir a lista de pessoas que saíram ao carregar a página
+        window.onload = exibirListaPessoasQueSairam;
+        
+    </script>
+
+</body>
+
+</html>
