@@ -79,6 +79,7 @@ input[type=submit] {
     /* overflow: auto; */
 }
 
+/* NOTE MODAL */
 #background-modal {
     width: 100vw;
     height: 100vh;
@@ -100,4 +101,32 @@ input[type=submit] {
     padding: 20px;
     border: 1px solid #888;
     /* Define a largura máxima do modal */
+}
+
+.but-delete {
+    background-color: red;
+    border: 1px solid red;
+}
+#dadosPessoa{
+    height: 80%;
+    width: 100%;
+}
+.dados-pass{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 90%;
+    width: calc(100% - 10px);
+    padding: 10px;
+}
+.dados-pass div:first-child{
+    width: 40%;
+}
+.dados-pass div:last-child{
+    width: 60%;
+}
+.dados-pass p {
+    margin: 10px;
 }
