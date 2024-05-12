@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voluntários</title>
+    <link rel="stylesheet" href="root.css">
+    <!-- <link rel="stylesheet" href="root.css"> -->
+</head>
+<body>
+    <nav>
+        <a href="index.html">Registrar novo Acolhido</a>
+        <a href="lista_ausentes.html">Controle de Saídas</a>
+        <a href="voluntario.html">Registro de Voluntários</a>
+    </nav>
+    <div class="container">
+        <div class="form">
+            <form id="myForm" action="#" method="post">
+                <div class="form-content">
+                    <!-- <div class="dados-pessoais"> -->
+                    <fieldset>
+                        <legend>Dados pessoais</legend>
+                        <div>
+                            <label for="nome_completo">Nome Completo:</label><br>
+                            <input type="text" id="nome_completo" name="nome_completo"><br>
+                        </div>
+                        <div>
+                            <label for="oq_faz">O que faz?</label><br>
+                            <input type="text" id="" name="cpf"><br>
+
+                            <label for="telefone">Telefone:</label><br>
+                            <input type="tel" id="telefone" name="telefone"><br>
+
+                            <label for="horarios_disponiveis">Horarios Disponíveis:</label><br>
+                            <textarea name="horarios_disponiveis" id="horarios_disponiveis"></textarea><br>
+                        </div>
+                    </fieldset>
+                </div>
+                <input type="submit" value="Enviar">
+
+            </form>
+        </div>
+        <div class="list">
+            <object data="./lista_voluntarios.html" type="text/html"></object>
+        </div>
+    </div>
+</body>
+</html>

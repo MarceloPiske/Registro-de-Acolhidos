@@ -1,14 +1,4 @@
 
-
-nav {
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: 10vh;
-    background-color: #363949;
-    padding-right: 1rem;
-}
 .container {
     height: 90vh;
     width: 100vw;

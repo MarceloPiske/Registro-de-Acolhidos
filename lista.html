@@ -12,9 +12,8 @@
 </head>
 
 <body>
-
+    <h2 id="total-pessoas">Pessoas Contabilizadas: </h2>
     <div id="lista-pessoas"></div>
-
     <script>
         function converterData(data) {
             // Cria um objeto de data a partir da string fornecida
@@ -24,11 +23,9 @@
             var dia = dataObj.getDate();
             var mes = dataObj.getMonth() + 1; // Mês é base 0, então adicionamos 1
             var ano = dataObj.getFullYear();
-            var horas = dataObj.getHours();
-            var minutos = dataObj.getMinutes();
 
             // Formata os componentes da data para o formato desejado
-            var dataFormatada = `${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano} ${horas}:${minutos}`;
+            var dataFormatada = `${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano}`;
 
             return dataFormatada;
         }
@@ -74,9 +71,10 @@
                 .catch(err => console.error(err));
         }
         // Função para criar e exibir a lista de pessoas
-        async function exibirListaPessoas() {
-            var pessoas = await get_acolhidos()
-            console.log(pessoas);
+        async function exibirListaPessoas(pessoas) {
+            
+            //console.log(pessoas);
+            document.getElementById("total-pessoas").innerText = "Pessoas Contabilizadas: "+pessoas.length
             var listaPessoasDiv = document.getElementById("lista-pessoas");
 
             // Limpa qualquer conteúdo existente na div
@@ -87,30 +85,26 @@
                 var pessoaDiv = document.createElement("div");
                 pessoaDiv.classList.add("pessoa");
                 pessoaDiv.id = pessoa.objectId
-
+                pessoaDiv.addEventListener("click", () => {
+                    parent.show_modal(pessoa)
+                    //parent.document.getElementById("background-modal").style.display = "block"
+                })
                 pessoaDiv.innerHTML = `
-                <div>
-                <h3>${pessoa.nome_completo}</h3>
-                <p><strong>Data de Nascimento:<br></strong> ${converterData(pessoa.data_nascimento.iso)}</p>
-                
-                </div>
-                <div>
-                    <p><strong>CPF:<br></strong> ${pessoa.cpf}</p>
-                <p><strong>Telefone:<br></strong> ${pessoa.telefone}</p>
-                <p><strong>Endereço:<br></strong> ${pessoa.endereco}, ${pessoa.numero} - ${pessoa.complemento}, ${pessoa.bairro}, ${pessoa.cidade}</p>
-                </div>
-                <div>
-                <p><strong>Situação da Família:<br></strong> ${pessoa.situacao_familia}</p>
-                <p><strong>Saúde e Necessidades Especiais:<br></strong> ${pessoa.saude_especiais}</p>
-                <p><strong>Observação Geral:<br></strong> ${pessoa.observacao_geral}</p>
-                </div>
-                <button onclick="delete_acolhido('${pessoa.objectId}')"><span class="material-symbols-sharp">delete</span></button>
-            `;
+                    <div>
+                        <h3>${pessoa.nome_completo}</h3>
+                    </div>
+                `;
 
                 listaPessoasDiv.appendChild(pessoaDiv);
             });
         }
 
+        async function inserir_todas_pessoas(){
+            var pessoas = await get_acolhidos()
+            exibirListaPessoas(pessoas)
+        }
+
+        inserir_todas_pessoas()
         // Chama a função para exibir a lista de pessoas ao carregar a página
         window.onload = exibirListaPessoas;
     </script>

@@ -62,26 +62,46 @@ nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 10vh;
+    height: 7vh;
     background-color: #363949;
     padding-right: 1rem;
 }
 nav a {
+    transition: all 350ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding-left: 1rem;
     cursor: pointer;
     color: #fff;
     font-size: large;
+    height: 100%;
+    padding: 10px;
+}
+nav a:hover {
+    background-color: #fff;
+    color:#363949;
 }
 .container {
-    height: 90vh;
+    height: 93vh;
     width: 100vw;
     overflow: hidden;
 }
 
 button {
+    transition: all 300ms ease;
+    padding: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    background-color: #363949;
+    color: #fff;
+    border: 1px solid #363949;
 }
-
+button:hover {
+    border: 1px solid #363949;
+    background-color: #fff;
+    color: #363949;
+}
 input {
     border-bottom: 1px solid #363949 ;
 }
@@ -93,4 +113,21 @@ input[type=checkbox]{
 input[type=radio]{
     appearance: auto;
     margin: 3px 3px 3px 4px;
+}
+
+input[type=submit] {
+    border: 1px solid #363949;
+    transition: all 300ms ease;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 1rem;
+    background-color: #363949;
+    color: #fff;
+}
+
+input[type=submit]:hover {
+    border: 1px solid #363949;
+    background-color: #fff;
+    color: #363949;
 }
