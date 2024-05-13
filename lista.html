@@ -14,9 +14,10 @@
 
 <body>
     <h2 id="total-pessoas">Pessoas Contabilizadas: </h2>
+    <button id="exportButton">Exportar para Excel</button>
     <div id="lista-pessoas"></div>
     <!--  Exportar Excell  -->
-    <button id="exportButton">Exportar para Excel</button>
+
 
     <script>
         // Dados JSON de exemplo
@@ -39,8 +40,8 @@
             let data = await get_acolhidos()
             let jsonData = []
             console.log(data);
-            for ( f of data){
-                jsonData.push({nome: f.nome_completo, nascimento: converterData(f.data_nascimento.iso) })
+            for (f of data) {
+                jsonData.push({ nome: f.nome_completo, nascimento: converterData(f.data_nascimento.iso) })
             }
             exportToExcel(jsonData, "data");
         });
@@ -49,7 +50,7 @@
         function converterData(data) {
             // Cria um objeto de data a partir da string fornecida
             var dataObj = new Date(data);
-
+            //console.log(dataObj);
             // Extrai os componentes da data
             var dia = dataObj.getDate();
             var mes = dataObj.getMonth() + 1; // Mês é base 0, então adicionamos 1
@@ -116,17 +117,32 @@
                 var pessoaDiv = document.createElement("div");
                 pessoaDiv.classList.add("pessoa");
                 pessoaDiv.id = pessoa.objectId
-                pessoaDiv.addEventListener("click", () => {
+                //Vizualizar
+                let view_button = document.createElement('button')
+                view_button.innerHTML = '<span class="material-symbols-sharp">visibility</span>'
+                view_button.addEventListener("click", () => {
                     parent.show_modal(pessoa)
-                    //parent.document.getElementById("background-modal").style.display = "block"
                 })
+                //Editar
+                let edit_button = document.createElement('button')
+                edit_button.innerHTML = '<span class="material-symbols-sharp">edit</span>'
+                edit_button.addEventListener("click", () => {
+                    editar_pessoas(pessoa)
+                })
+                
+                let butts_content = document.createElement("div")
+                butts_content.appendChild(edit_button)
+                butts_content.appendChild(view_button)
+                
                 pessoaDiv.innerHTML = `
                     <div>
                         <h3>${pessoa.nome_completo}</h3>
                     </div>
                 `;
-
+                
+                pessoaDiv.appendChild(butts_content)
                 listaPessoasDiv.appendChild(pessoaDiv);
+                
             });
         }
 
@@ -136,8 +152,44 @@
         }
 
         inserir_todas_pessoas()
+
+        function editar_pessoas(pessoa) {
+            `
+                        <div>
+                            <label for="genero">Gênero:</label><br>
+                            <input type="radio" id="masculino" name="genero" value="masculino">
+                            <label for="masculino">Masculino</label><br>
+                            <input type="radio" id="feminino" name="genero" value="feminino">
+                            <label for="feminino">Feminino</label>
+                        </div>`
+            parent.document.getElementById("nome_completo").value = pessoa.nome_completo
+            parent.document.getElementById("data_nascimento").value = pessoa.data_nascimento.iso.split("T")[0]
+            
+            if (pessoa.genero == "masculino") {
+                parent.document.getElementById("masculino").checked = true
+            } else {
+                parent.document.getElementById("feminino").checked = true
+            }
+
+            parent.document.getElementById("cpf").value = pessoa.cpf
+            parent.document.getElementById("telefone").value = pessoa.telefone
+            parent.document.getElementById("rua").value = pessoa.rua
+            parent.document.getElementById("numero").value = pessoa.numero
+            parent.document.getElementById("complemento").value = pessoa.complemento
+            parent.document.getElementById("bairro").value = pessoa.bairro
+            parent.document.getElementById("cidade").value = pessoa.cidade
+            parent.document.getElementById("situacao_familia").value = pessoa.situacao_familia
+            parent.document.getElementById("saude_especiais").value = pessoa.saude_especiais
+            parent.document.getElementById("observacao_geral").value = pessoa.observacao_geral
+
+            parent.document.getElementById("editar-pessoa").style.display = "block"
+            parent.document.getElementById("criar-pessoa").style.display = "none"
+            
+            localStorage.setItem("atual-edit-id", pessoa.objectId)
+        }
         // Chama a função para exibir a lista de pessoas ao carregar a página
         //window.onload = exibirListaPessoas;
+       
     </script>
 
 </body>

@@ -9,7 +9,9 @@
     height: 80%;
     padding: 10px;
 }
-
+.but-content {
+    display: flex;
+}
 fieldset:first-child {
     width: 20% !important;
 }
@@ -129,4 +131,21 @@ input[type=submit] {
 }
 .dados-pass p {
     margin: 10px;
+}
+
+#editar-pessoa {
+    border: 1px solid #363949;
+    transition: all 300ms ease;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 1rem;
+    background-color: #363949;
+    color: #fff;
+}
+
+#editar-pessoa:hover {
+    border: 1px solid #363949;
+    background-color: #fff;
+    color: #363949;
 }

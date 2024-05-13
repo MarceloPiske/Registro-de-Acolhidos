@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-around;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     /* border: 1px solid #363949; */
     box-shadow: #363949aa 0px 1px 3px;
@@ -10,7 +10,7 @@
     padding: 5px;
     width: calc(24% - 10px);
     margin-bottom: 10px;
-    height: 40px;
+    height: fit-content;
     cursor: pointer;
 }
 
@@ -18,12 +18,26 @@
     width: 100%;
 }
 
-
 .pessoa div {
-    width: 100%;
+    width: 90%;
 }
-
-
+.pessoa div:last-child {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    align-items: center;
+    justify-content: space-between;
+height: 100%;
+    
+}
+.pessoa div:last-child button {
+    padding: 3px;
+    width: fit-content;
+    
+}
+.pessoa div:last-child button span{
+    font-size: large;
+}
 #lista-pessoas {
     display: flex;
     max-width: 100%;

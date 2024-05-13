@@ -34,10 +34,10 @@
                         <legend>Dados pessoais</legend>
                         <div>
                             <label for="nome_completo">Nome Completo:</label><br>
-                            <input type="text" id="nome_completo" name="nome_completo"><br>
+                            <input type="text" id="nome_completo" name="nome_completo" required><br>
 
                             <label for="data_nascimento">Data de Nascimento:</label><br>
-                            <input type="date" id="data_nascimento" name="data_nascimento"><br>
+                            <input type="date" id="data_nascimento" name="data_nascimento" required><br>
                         </div>
                         <div>
                             <label for="cpf">CPF:</label><br>
@@ -92,8 +92,10 @@
 
                     </fieldset>
                 </div>
-                <input type="submit" value="Enviar">
-
+                <div class="but-content">
+                    <input id="criar-pessoa" type="submit" value="Criar">
+                    <div onclick="editar_dados_form()" id="editar-pessoa" style="display: none;">Editar</div>
+                </div>
             </form>
         </div>
         <div class="list">
@@ -116,9 +118,9 @@
 
             return dataFormatada;
         }
-        
+
         function show_modal(pessoa) {
-            
+            //console.log(pessoa);
             // Função para abrir o modal e exibir os dados da pessoa
             var dadosPessoa = document.getElementById("dadosPessoa");
 
@@ -144,7 +146,7 @@
                     </div>
                 </div>
                 <button class="but-delete" onclick="delete_acolhido('${pessoa.objectId}')"><span class="material-symbols-sharp">delete</span></button>
-            `;;
+            `;
 
             // Define os dados no elemento HTML
             dadosPessoa.innerHTML = dadosFormatados;
@@ -157,6 +159,7 @@
         function close_modal() {
             document.getElementById("background-modal").style.display = "none"
         };
+        
         function create_acolhido(params) {
             const options = {
                 method: 'POST',
@@ -177,7 +180,49 @@
                 })
                 .catch(err => console.error(err));
         }
+        
+        function delete_acolhido(id) {
+            console.log(id);
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+                body: JSON.stringify({ deleted: true })
+            };
 
+            fetch('https://parseapi.back4app.com/classes/acolhidos/' + id, options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    location.reload()
+                })
+                .catch(err => console.error(err));
+        }
+        
+        function update_acolhido(data) {
+            //console.log(id);
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Parse-Application-Id': 'mxMjwUljCNcGI8HGoDfehXkkKxCFclDkhB9quDT7',
+                    'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
+                },
+                body: JSON.stringify(data)
+            };
+
+            fetch('https://parseapi.back4app.com/classes/acolhidos/' + data.objectId, options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    location.reload()
+                })
+                .catch(err => console.error(err));
+        }
+        
         document.getElementById("myForm").addEventListener("submit", function (event) {
             event.preventDefault(); // Previne o envio padrão do formulário
 
@@ -201,6 +246,24 @@
             //console.log(formObject);
         });
 
+        function editar_dados_form(){
+            var formData = new FormData(parent.document.getElementById("myForm"));
+
+            // Conversão dos dados para objeto JavaScript
+            var formObject = {};
+            formData.forEach(function (value, key) {
+                formObject[key] = value;
+            });
+
+            formObject.objectId = localStorage.getItem("atual-edit-id")
+            formObject.data_nascimento = { "__type": "Date", "iso": formObject.data_nascimento }
+            formObject.telefone = parseInt(formObject.telefone)
+            formObject.cpf = parseInt(formObject.cpf)
+            formObject.numero = parseInt(formObject.numero)
+            console.log(formObject);
+            
+            update_acolhido(formObject)
+        }
     </script>
 
 </body>
