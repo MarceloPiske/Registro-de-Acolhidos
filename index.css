@@ -94,6 +94,7 @@ input[type=submit] {
 }
 
 #modal-dados {
+    position: relative;
     height: 80%;
     width: 80%;
     background-color: #fff;
@@ -105,6 +106,21 @@ input[type=submit] {
     /* Define a largura máxima do modal */
 }
 
+.close_modal {
+    background-color: rgba(64, 62, 62, 0.529);
+    color: black;
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(64, 62, 62, 0.529);
+    right: 1%;
+    top: 1%;
+    width: 25px;
+    height: 25px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .but-delete {
     background-color: red;
     border: 1px solid red;
