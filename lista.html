@@ -15,15 +15,36 @@
 
 <body>
     <div class="cabecalho">
+
         <h2>Lista de Pessoas</h2>
-        <h3 id="total-pessoas">Pessoas Contabilizadas: </h3>
-        <button id="exportButton">Exportar para Excel</button>
+        <div class="content-user-interaction">
+            <h3 id="total-pessoas">Pessoas Contabilizadas: </h3>
+            <div class="filtro">
+                    <input type="text" name="search" id="search" placeholder="search">
+                    <button onclick="search(document.getElementById('search').value)">
+                        <span class="material-symbols-sharp">search</span>
+                    </button>
+            </div>
+
+            <button id="exportButton">Exportar para Excel</button>
+        </div>
     </div>
     <div id="lista-pessoas"></div>
-    <!--  Exportar Excell  -->
 
-
+    <script src="./indexed_db.js"></script>
     <script>
+        function get_age(dateString) {
+            const today = new Date();
+            const birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
         // Dados JSON de exemplo
         const jsonData = [
         ];
@@ -38,15 +59,22 @@
 
         // Manipulador de evento para o botão de exportação
         document.getElementById("exportButton").addEventListener("click", async function () {
-            let data = await get_acolhidos(false)
+            /* let data = await get_acolhidos(false)
             if (data.length == 100) {
                 let p = await get_acolhidos({ "cont": 100 })
                 data = data.concat(p)
-            }
+            } */
+            data = await get_all({ "flag": "all" }, "acolhidos", "pessoas")
+
             let jsonData = []
-            console.log(data);
+
+
             for (f of data) {
-                jsonData.push({ nome: f.nome_completo, nascimento: converterData(f.data_nascimento.iso) })
+                jsonData.push({
+                    Nome: f.nome_completo,
+                    Nascimento: converterData(f.data_nascimento.iso),
+                    Idade: get_age(f.data_nascimento.iso)
+                })
             }
             exportToExcel(jsonData, "data");
         });
@@ -150,9 +178,9 @@
                 pessoaDiv.innerHTML = `
                     <div>
                         <h3>${pessoa.nome_completo}</h3>
+                        <p>${get_age(pessoa.data_nascimento.iso)} Anos</p>
                     </div>
                 `;
-
                 pessoaDiv.appendChild(butts_content)
                 listaPessoasDiv.appendChild(pessoaDiv);
 
@@ -161,26 +189,21 @@
 
         async function inserir_todas_pessoas() {
             var pessoas = await get_acolhidos(false)
-           
+
             if (pessoas.length == 100) {
                 let p = await get_acolhidos({ "cont": 100 })
                 pessoas = pessoas.concat(p)
             }
-            console.log(pessoas.length);
+
+            atualizar_database(pessoas, "acolhidos", "pessoas")
+            //console.log(pessoas.length);
             exibirListaPessoas(pessoas)
         }
 
         inserir_todas_pessoas()
 
         function editar_pessoas(pessoa) {
-            `
-                        <div>
-                            <label for="genero">Gênero:</label><br>
-                            <input type="radio" id="masculino" name="genero" value="masculino">
-                            <label for="masculino">Masculino</label><br>
-                            <input type="radio" id="feminino" name="genero" value="feminino">
-                            <label for="feminino">Feminino</label>
-                        </div>`
+
             parent.document.getElementById("nome_completo").value = pessoa.nome_completo
             parent.document.getElementById("data_nascimento").value = pessoa.data_nascimento.iso.split("T")[0]
 
@@ -192,14 +215,14 @@
 
             parent.document.getElementById("cpf").value = pessoa.cpf
             parent.document.getElementById("telefone").value = pessoa.telefone
-            
+
             parent.document.getElementById("rua").value = pessoa.rua
             parent.document.getElementById("numero").value = pessoa.numero
             parent.document.getElementById("complemento").value = pessoa.complemento
             parent.document.getElementById("bairro").value = pessoa.bairro
             parent.document.getElementById("cidade").value = pessoa.cidade
             parent.document.getElementById("alojamento").value = pessoa.alojamento
-            
+
             parent.document.getElementById("situacao_familia").value = pessoa.situacao_familia
             parent.document.getElementById("saude_especiais").value = pessoa.saude_especiais
             parent.document.getElementById("observacao_geral").value = pessoa.observacao_geral
@@ -211,7 +234,11 @@
         }
         // Chama a função para exibir a lista de pessoas ao carregar a página
         //window.onload = exibirListaPessoas;
-
+        async function search(nome){
+            let pessoas = await get_all({ "flag": "data", "valor": nome }, "acolhidos", "pessoas")
+            console.log(pessoas);
+            exibirListaPessoas(pessoas)
+        }
     </script>
 
 </body>
