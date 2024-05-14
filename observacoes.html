@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observações</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="stylesheet" href="root.css">
+</head>
+<style>
+    #obs {
+        width: 50%;
+        height: 50%;
+    }
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: baseline;
+        padding: 2rem;
+        flex-direction: column;
+        height: calc(90vh - 30px);
+    width: 100vw;
+    overflow: hidden;
+    }
+    textarea {
+        border: 1px solid black;
+        padding: 15px;
+    }
+</style>
+
+<body>
+    <nav>
+        <a href="index.html">Registrar novo Acolhido</a>
+        <a href="lista_ausentes.html">Controle de Saídas</a>
+        <!-- <a href="voluntario.html">Registro de Voluntários</a> -->
+    </nav>
+    <div class="container">
+        <h2>Observações Gerais de Turno</h2>
+        <textarea name="obs" id="obs"></textarea>
+    </div>
+</body>
+
+</html>

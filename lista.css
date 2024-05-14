@@ -24,6 +24,9 @@ body {
     flex-wrap: nowrap;
     flex-direction: row;
 }
+.content-user-interaction h3 {
+    margin-left: 5px;
+}
 .content-user-interaction .filtro {
     display: flex;
     align-items: baseline;

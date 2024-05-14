@@ -18,7 +18,9 @@
 
         <h2>Lista de Pessoas</h2>
         <div class="content-user-interaction">
-            <h3 id="total-pessoas">Pessoas Contabilizadas: </h3>
+            <h3 id="total-pessoas">Total: </h3>
+            <h3 id="total-homens">Homens: </h3>
+            <h3 id="total-mulheres">Mulheres: </h3>
             <div class="filtro">
                     <input type="text" name="search" id="search" placeholder="search">
                     <button onclick="search(document.getElementById('search').value)">
@@ -146,8 +148,13 @@
         // Função para criar e exibir a lista de pessoas
         async function exibirListaPessoas(pessoas) {
 
-            //console.log(pessoas);
-            document.getElementById("total-pessoas").innerText = "Pessoas Contabilizadas: " + pessoas.length
+            let homens = pessoas.filter(f => f.genero == "masculino")
+            let mulheres = pessoas.filter(f => f.genero == "feminino")
+
+            document.getElementById("total-pessoas").innerText = "Total: " + pessoas.length
+            document.getElementById("total-homens").innerText = "Homens: " + homens.length
+            document.getElementById("total-mulheres").innerText = "Mulheres: " + mulheres.length
+            
             var listaPessoasDiv = document.getElementById("lista-pessoas");
 
             // Limpa qualquer conteúdo existente na div

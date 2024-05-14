@@ -55,7 +55,7 @@ body {
 }
 h2 {
     padding-left: 1rem;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 nav {
     color: #fff;
