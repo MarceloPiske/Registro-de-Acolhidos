@@ -42,6 +42,10 @@
         // Manipulador de evento para o botão de exportação
         document.getElementById("exportButton").addEventListener("click", async function () {
             let data = await get_acolhidos(false)
+            if (data.length == 100) {
+                let p = await get_acolhidos({ "cont": 100 })
+                data = data.concat(p)
+            }
             let jsonData = []
             console.log(data);
             for (f of data) {
