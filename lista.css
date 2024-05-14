@@ -38,7 +38,7 @@ body {
     width: calc(24% - 10px);
     margin-bottom: 10px;
     height: fit-content;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .pessoa h3 {

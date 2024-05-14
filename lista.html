@@ -26,9 +26,6 @@
     <script>
         // Dados JSON de exemplo
         const jsonData = [
-            { Name: "John", Age: 30, City: "New York" },
-            { Name: "Alice", Age: 25, City: "Los Angeles" },
-            { Name: "Bob", Age: 35, City: "Chicago" }
         ];
 
         // Função para exportar JSON para Excel
@@ -195,11 +192,14 @@
 
             parent.document.getElementById("cpf").value = pessoa.cpf
             parent.document.getElementById("telefone").value = pessoa.telefone
+            
             parent.document.getElementById("rua").value = pessoa.rua
             parent.document.getElementById("numero").value = pessoa.numero
             parent.document.getElementById("complemento").value = pessoa.complemento
             parent.document.getElementById("bairro").value = pessoa.bairro
             parent.document.getElementById("cidade").value = pessoa.cidade
+            parent.document.getElementById("alojamento").value = pessoa.alojamento
+            
             parent.document.getElementById("situacao_familia").value = pessoa.situacao_familia
             parent.document.getElementById("saude_especiais").value = pessoa.saude_especiais
             parent.document.getElementById("observacao_geral").value = pessoa.observacao_geral
