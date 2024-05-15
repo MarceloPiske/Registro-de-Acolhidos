@@ -64,7 +64,7 @@
                         'X-Parse-REST-API-Key': '6tV6elcdHg1Ycn3F0qlw6Q87B5vEZwJqJEIRxsrg'
                     }
                 };
-                let params = {"where": `{"deleted": false}`}
+                let params = {"where": `{"deleted": false}`, "order": "chegou"}
                 url = new URL('https://parseapi.back4app.com/classes/lista_saida')
                 url.search = new URLSearchParams(params).toString();
                 fetch(url, options)
