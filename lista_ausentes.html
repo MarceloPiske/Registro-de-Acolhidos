@@ -26,7 +26,7 @@
                     <div>
                         <label for="nome">Nome Completo:</label><br>
                         <select type="text" id="nome" name="nome" required>
-                            <!-- <option value="">Nome aqui</option> -->
+                            <option value="">Selecione</option>
                         </select><br>
                         <br>
                         <label for="volta">Vai voltar?</label><br>
@@ -120,6 +120,10 @@
         async function listar_nomes_select() {
             let select = document.getElementById("nome")
             data = await get_all({ "flag": "all" }, "acolhidos", "pessoas")
+
+            data.sort(function(a,b) {
+                return a.nome_completo < b.nome_completo ? -1 : a.nome_completo > b.nome_completo ? 1 : 0;
+            });
 
             for (d of data) {
                 let opt = document.createElement("option")
