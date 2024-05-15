@@ -16,7 +16,8 @@
 <body>
     <div class="cabecalho">
 
-        <h2>Lista de Pessoas</h2>
+        <h2 onclick="inserir_todas_pessoas()">Lista de Pessoas</h2>
+        <h2 onclick="inserir_historico()">Histórico de Pessoas</h2>
         <div class="content-user-interaction">
             <h3 id="total-pessoas">Total: </h3>
             <h3 id="total-homens">Homens: </h3>
@@ -61,11 +62,7 @@
 
         // Manipulador de evento para o botão de exportação
         document.getElementById("exportButton").addEventListener("click", async function () {
-            /* let data = await get_acolhidos(false)
-            if (data.length == 100) {
-                let p = await get_acolhidos({ "cont": 100 })
-                data = data.concat(p)
-            } */
+           
             data = await get_all({ "flag": "all" }, "acolhidos", "pessoas")
 
             let jsonData = []
@@ -97,7 +94,7 @@
             return dataFormatada;
         }
         // Array de objetos com dados das pessoas
-        function get_acolhidos(skip) {
+        function get_acolhidos(skip, deleted) {
             return new Promise((resolve, reject) => {
                 const options = {
                     method: 'GET',
@@ -109,9 +106,9 @@
                 console.log(skip);
                 let params = {}
                 if (skip) {
-                    params = { "where": `{"deleted": false}`, "skip": skip.cont, "order": "nome_completo" }
+                    params = { "where": `{"deleted": ${deleted}}`, "skip": skip.cont, "order": "nome_completo" }
                 } else {
-                    params = { "where": `{"deleted": false}`, "order": "nome_completo" }
+                    params = { "where": `{"deleted": ${deleted}}`, "order": "nome_completo" }
                 }
                 url = new URL('https://parseapi.back4app.com/classes/acolhidos')
                 url.search = new URLSearchParams(params).toString();
@@ -195,14 +192,27 @@
         }
 
         async function inserir_todas_pessoas() {
-            var pessoas = await get_acolhidos(false)
+            var pessoas = await get_acolhidos(false, false)
 
             if (pessoas.length == 100) {
-                let p = await get_acolhidos({ "cont": 100 })
+                let p = await get_acolhidos({ "cont": 100 }, false)
                 pessoas = pessoas.concat(p)
             }
 
             atualizar_database(pessoas, "acolhidos", "pessoas")
+            //console.log(pessoas.length);
+            exibirListaPessoas(pessoas)
+        }
+        
+        async function inserir_historico() {
+            var pessoas = await get_acolhidos(false, true)
+
+            if (pessoas.length == 100) {
+                let p = await get_acolhidos({ "cont": 100 }, false)
+                pessoas = pessoas.concat(p)
+            }
+
+            //atualizar_database(pessoas, "acolhidos", "pessoas")
             //console.log(pessoas.length);
             exibirListaPessoas(pessoas)
         }

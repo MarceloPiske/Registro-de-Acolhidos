@@ -14,7 +14,8 @@ body {
     align-items: center;
 }
 .cabecalho h2 {
-    width: 30%;
+    cursor: pointer;
+    width: 20%;
 }
 .content-user-interaction {
     width: 70%;
