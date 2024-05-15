@@ -25,7 +25,9 @@
                 <div class="form-content">
                     <div>
                         <label for="nome">Nome Completo:</label><br>
-                        <input type="text" id="nome" name="nome" required><br>
+                        <select type="text" id="nome" name="nome" required>
+                            <!-- <option value="">Nome aqui</option> -->
+                        </select><br>
                         <br>
                         <label for="volta">Vai voltar?</label><br>
                         <input type="checkbox" name="volta" id="volta"><span>Sim</span><br>
@@ -50,6 +52,7 @@
             <div id="lista-pessoas-sairam"></div>
         </div>
     </div>
+    <script src="./indexed_db.js"></script>
     <script>
         // Array de objetos com dados das pessoas que saíram
         function get_pessoas_sairam() {
@@ -71,6 +74,7 @@
             })
         }
 
+        
         function create_pessoas_sairam(params) {
             const options = {
                 method: 'POST',
@@ -113,7 +117,18 @@
                 
         }
 
+        async function listar_nomes_select() {
+            let select = document.getElementById("nome")
+            data = await get_all({ "flag": "all" }, "acolhidos", "pessoas")
 
+            for (d of data) {
+                let opt = document.createElement("option")
+                opt.value = d.nome_completo
+                opt.innerText = d.nome_completo
+                select.appendChild(opt)
+            }
+        }
+        listar_nomes_select()
         function chegou(id) {
             let chegou = document.getElementById("chegou-" + id).checked
             const options = {
@@ -134,16 +149,18 @@
         function converterData(data) {
             // Cria um objeto de data a partir da string fornecida
             var dataObj = new Date(data);
-
+            console.log(`Data: ${data}\n Date: ${dataObj}`);
             // Extrai os componentes da data
             var dia = dataObj.getDate();
             var mes = dataObj.getMonth() + 1; // Mês é base 0, então adicionamos 1
             var ano = dataObj.getFullYear();
-            var horas = dataObj.getHours();
+            var horas = dataObj.getHours()+3; // Adicionar horas do fusohorario
             var minutos = dataObj.getMinutes();
 
             // Formata os componentes da data para o formato desejado
-            var dataFormatada = `${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano} ${horas}:${minutos}`;
+            var dataFormatada = `
+            ${dia < 10 ? '0' : ''}${dia}/${mes < 10 ? '0' : ''}${mes}/${ano} 
+            ${horas}:${minutos}`;
 
             return dataFormatada;
         }
