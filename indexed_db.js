@@ -15,7 +15,7 @@ function open_db(db_name, obj_store) {
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
 
-            const objectStore = db.createObjectStore(obj_store, { keyPath: "objectId" });
+            const objectStore = db.createObjectStore(obj_store, { keyPath: "objectId",  unique: true });
             objectStore.createIndex("objectId", "objectId", { unique: true });
         };
     });
@@ -86,6 +86,8 @@ async function atualizar_database(jsondata, db_name, obj_store) {
 
     const transaction = db.transaction([obj_store], "readwrite");
     const store = transaction.objectStore(obj_store);
+
+    store.clear()
 
     for (let data of jsondata) {
         const request = store.get(data.objectId);
